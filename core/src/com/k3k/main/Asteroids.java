@@ -1,20 +1,22 @@
-package com.k3k.game;
+package com.k3k.main;
 
-import cam.k3k.managers.GameInputProcessor;
+import com.k3k.managers.GameInputProcessor;
+import com.k3k.managers.GameKeys;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
+import com.k3k.managers.GameStateManager;
 
 public class Asteroids implements ApplicationListener {
 	public static int WIDTH;
 	public static int HEIGHT;
 
 	public static OrthographicCamera cam;
+
+	private GameStateManager gsm;
 	SpriteBatch batch;
 	Texture img;
 	
@@ -31,6 +33,8 @@ public class Asteroids implements ApplicationListener {
 		Gdx.input.setInputProcessor(
 				new GameInputProcessor()
 		);
+
+		gsm = new GameStateManager();
 	}
 
 	@Override
@@ -43,9 +47,11 @@ public class Asteroids implements ApplicationListener {
 		Gdx.gl.glClearColor(0,0,0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-//		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-//			System.out.println("SPACE");
-//		}
+		gsm.update(Gdx.graphics.getDeltaTime());
+		gsm.draw();
+
+		GameKeys.update();
+
 		batch.begin();
 		batch.draw(img, 0, 0);
 		batch.end();
