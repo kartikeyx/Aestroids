@@ -2,6 +2,7 @@ package com.k3k.gamestates;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.k3k.entities.Player;
+import com.k3k.managers.GameKeys;
 import com.k3k.managers.GameStateManager;
 
 public class PlayState extends GameState{
@@ -21,6 +22,7 @@ public class PlayState extends GameState{
 
     @Override
     public void update(float dt) {
+        handleInput();
         player.update(dt);
     }
 
@@ -31,7 +33,9 @@ public class PlayState extends GameState{
 
     @Override
     public void handleInput() {
-
+        player.setLeft(GameKeys.isDown(GameKeys.LEFT));
+        player.setRight(GameKeys.isDown(GameKeys.RIGHT));
+        player.setUp(GameKeys.isDown(GameKeys.UP));
     }
 
     @Override

@@ -6,6 +6,9 @@ import com.k3k.main.Asteroids;
 
 public class Player extends SpaceObject{
 
+    private float[] flamex;
+    private float[] flamey;
+
     private boolean left;
     private boolean right;
     private boolean up;
@@ -24,21 +27,27 @@ public class Player extends SpaceObject{
 
         shapex = new float[4];
         shapey = new float[4];
+        flamex = new float[3];
+        flamey = new float[3];
+
+        radians = 3.1415f / 2;
+        rotationSpeed = 3;
 
     }
 
     private void setShape(){
+
         shapex[0] = x + MathUtils.cos(radians) * 8;
         shapey[0] = y + MathUtils.sin(radians) * 8;
 
-        shapex[1] = x + MathUtils.cos(radians - 4 * 3.1415f /5) * 8;
-        shapey[1] = y + MathUtils.sin(radians - 4 * 3.1415f /5) * 8;
+        shapex[1] = x + MathUtils.cos(radians - 4 * 3.1415f / 5) * 8;
+        shapey[1] = y + MathUtils.sin(radians - 4 * 3.1415f / 5) * 8;
 
         shapex[2] = x + MathUtils.cos(radians + 3.1415f) * 5;
-        shapex[2] = y + MathUtils.sin(radians + 3.1415f) * 5;
+        shapey[2] = y + MathUtils.sin(radians + 3.1415f) * 5;
 
-        shapex[3] = x + MathUtils.cos(radians + 4 * 3.1415f /5) * 8;
-        shapex[3] = y + MathUtils.sin(radians + 4 * 3.1415f /5) * 8;
+        shapex[3] = x + MathUtils.cos(radians + 4 * 3.1415f / 5) * 8;
+        shapey[3] = y + MathUtils.sin(radians + 4 * 3.1415f / 5) * 8;
     }
 
     public void setLeft(boolean b){
@@ -78,8 +87,8 @@ public class Player extends SpaceObject{
         }
 
         //set position
-        x += dx;
-        y += dy;
+        x += dx * dt;
+        y += dy * dt;
 
         //set shape
         setShape();

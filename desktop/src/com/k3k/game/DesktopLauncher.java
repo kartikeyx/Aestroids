@@ -8,7 +8,6 @@ import com.k3k.main.Asteroids;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		config.setForegroundFPS(60);
 		config.setTitle("Asteroids");
 		config.setWindowedMode(500,400);
 		config.setResizable(false);
