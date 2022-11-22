@@ -1,12 +1,12 @@
 package com.k3k.entities;
 
-import com.badlogic.gdx.Game;
-
+import static com.k3k.main.Asteroids.HEIGHT;
+import static com.k3k.main.Asteroids.WIDTH;
 
 public class SpaceObject {
     //position
     protected float x;
-    protected float y = Game.HEIGHT;
+    protected float y;
 
     //vector
     protected float dx;
@@ -29,15 +29,15 @@ public class SpaceObject {
 
     protected void wrap(){
         if (x < 0) {
-            x = Game.WIDTH;
+            x = WIDTH;
         }
-        if (x > Game.WIDTH) {
+        if (x > WIDTH) {
             x = 0;
         }
         if (y < 0) {
-            y = Game.HEIGHT;
+            y = HEIGHT;
         }
-        if (y > Game.HEIGHT) {
+        if (y > HEIGHT) {
             y = 0;
         }
     }

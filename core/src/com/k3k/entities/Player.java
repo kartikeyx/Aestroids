@@ -1,8 +1,8 @@
 package com.k3k.entities;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.k3k.main.Asteroids;
 
 public class Player extends SpaceObject{
 
@@ -15,8 +15,8 @@ public class Player extends SpaceObject{
     private float deceleration;
 
     public Player(){
-        x = Game.WIDTH / 2;
-        y = Game.HEIGHT / 2;
+        x = Asteroids.WIDTH / 2;
+        y = Asteroids.HEIGHT / 2;
 
         maxSpeed = 300;
         acceleration = 200;
@@ -89,6 +89,16 @@ public class Player extends SpaceObject{
     }
 
     public void draw(ShapeRenderer sr){
+
+        sr.setColor(1,1,1,1);
+
+        sr.begin(ShapeRenderer.ShapeType.Line);
+
+        for (int i = 0, j = shapex.length - 1; i < shapex.length; j = i++){
+            sr.line(shapex[i], shapey[i], shapex[j], shapey[j]);
+        }
+
+        sr.end();
 
     }
 }

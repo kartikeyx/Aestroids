@@ -1,7 +1,8 @@
-package com.k3k.main;
+package com.k3k.game;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.k3k.main.Asteroids;
 
 // Please note that on macOS your application needs to be started with the -XstartOnFirstThread JVM argument
 public class DesktopLauncher {
@@ -9,7 +10,7 @@ public class DesktopLauncher {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
 		config.setTitle("Asteroids");
-		config.setWindowedMode(500, 400);
+		config.setWindowedMode(500,400);
 		config.setResizable(false);
 		new Lwjgl3Application(new Asteroids(), config);
 	}
