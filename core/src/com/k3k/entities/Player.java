@@ -4,8 +4,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.k3k.main.Asteroids;
 
+import java.util.ArrayList;
+
 public class Player extends SpaceObject{
 
+    private final int MAX_BULLETS = 4;
+    private ArrayList<Bullet> bullets;
     private float[] flamex;
     private float[] flamey;
 
@@ -16,8 +20,12 @@ public class Player extends SpaceObject{
     private float maxSpeed;
     private float acceleration;
     private float deceleration;
+    private float acceleratingTimer;
 
-    public Player(){
+    public Player(ArrayList<Bullet> bullets){
+
+        this.bullets = bullets;
+
         x = Asteroids.WIDTH / 2;
         y = Asteroids.HEIGHT / 2;
 
@@ -50,6 +58,16 @@ public class Player extends SpaceObject{
         shapey[3] = y + MathUtils.sin(radians + 4 * 3.1415f / 5) * 8;
     }
 
+    private void setFlame(){
+        flamex[0] = x + MathUtils.cos(radians - 5 * 3.1415f / 6) * 5;
+        flamey[0] = y + MathUtils.sin(radians - 5 * 3.1415f / 6) * 5;
+
+        flamex[1] = x + MathUtils.cos(radians - 3.1415f) * (6 + acceleratingTimer * 50);
+        flamey[1] = y + MathUtils.sin(radians - 3.1415f) * (6 + acceleratingTimer * 50);
+
+        flamex[2] = x + MathUtils.cos(radians + 5 * 3.1415f / 6) * 5;
+        flamey[2] = y + MathUtils.sin(radians + 5 * 3.1415f / 6) * 5;
+    }
     public void setLeft(boolean b){
         left = b;
     }
@@ -58,6 +76,11 @@ public class Player extends SpaceObject{
     }
     public void setUp(boolean b){
         up = b;
+    }
+
+    public void shoot(){
+        if (bullets.size() == MAX_BULLETS) return;
+        bullets.add(new Bullet(x, y, radians));
     }
 
     public void update(float dt){
@@ -73,6 +96,13 @@ public class Player extends SpaceObject{
         if (up){
             dx += MathUtils.cos(radians) * acceleration * dt;
             dy += MathUtils.sin(radians) * acceleration * dt;
+            acceleratingTimer += dt;
+            if (acceleratingTimer > 0.1f){
+                acceleratingTimer = 0;
+            }
+        }
+        else {
+            acceleratingTimer = 0;
         }
 
         //deceleration
@@ -93,6 +123,11 @@ public class Player extends SpaceObject{
         //set shape
         setShape();
 
+        //set flame
+        if (up){
+            setFlame();
+        }
+
         //screen wrap
         wrap();
     }
@@ -103,10 +138,17 @@ public class Player extends SpaceObject{
 
         sr.begin(ShapeRenderer.ShapeType.Line);
 
+        //draw ship
         for (int i = 0, j = shapex.length - 1; i < shapex.length; j = i++){
             sr.line(shapex[i], shapey[i], shapex[j], shapey[j]);
         }
 
+        //draw flames
+        if (up){
+            for (int i = 0, j = flamex.length - 1; i < flamex.length; j = i++){
+                sr.line(flamex[i], flamey[i], flamex[j], flamey[j]);
+            }
+        }
         sr.end();
 
     }
