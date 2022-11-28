@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.k3k.entities.Asteroid;
 import com.k3k.entities.Bullet;
+import com.k3k.entities.Particle;
 import com.k3k.entities.Player;
 import com.k3k.main.Asteroids;
 import com.k3k.managers.GameKeys;
@@ -17,6 +18,8 @@ public class PlayState extends GameState{
     private Player player;
     private ArrayList<Bullet> bullets;
     private ArrayList<Asteroid> asteroids;
+
+    private ArrayList<Particle> particles;
 
     private int level;
     private int totalAsteroids;
@@ -35,12 +38,31 @@ public class PlayState extends GameState{
         player = new Player(bullets);
 
         asteroids = new ArrayList<Asteroid>();
-        asteroids.add(new Asteroid(100, 100, Asteroid.LARGE));
-        asteroids.add(new Asteroid(200, 100, Asteroid.MEDIUM));
-        asteroids.add(new Asteroid(300, 100, Asteroid.SMALL));
+
+        particles = new ArrayList<Particle>();
 
         level = 1;
         spawnAsteroids();
+    }
+
+    private void createParticles(float x, float y){
+        for (int i = 0; i < 6; i++){
+            particles.add(new Particle(x, y));
+        }
+    }
+
+    private void splitAsteroids(Asteroid a){
+
+        createParticles(a.getx(), a.gety());
+        numAsteroidsLeft--;
+        if (a.getType() == Asteroid.LARGE){
+            asteroids.add(new Asteroid(a.getx(), a.gety(), Asteroid.MEDIUM));
+            asteroids.add(new Asteroid(a.getx(), a.gety(), Asteroid.MEDIUM));
+        }
+        if (a.getType() == Asteroid.MEDIUM){
+            asteroids.add(new Asteroid(a.getx(), a.gety(), Asteroid.SMALL));
+            asteroids.add(new Asteroid(a.getx(), a.gety(), Asteroid.SMALL));
+        }
     }
 
     private void spawnAsteroids(){
@@ -75,8 +97,19 @@ public class PlayState extends GameState{
     public void update(float dt) {
         //get user input
         handleInput();
+
+        //next level
+        if (asteroids.size() == 0){
+            level++;
+            spawnAsteroids();
+        }
+
         //update player
         player.update(dt);
+        if (player.isDead()){
+            player.reset();
+            return;
+        }
         //update player bullets
         for (int i = 0; i < bullets.size(); i++){
             bullets.get(i).update(dt);
@@ -94,6 +127,51 @@ public class PlayState extends GameState{
                 i--;
             }
         }
+
+        //update particles
+        for (int i = 0; i < particles.size(); i++){
+            particles.get(i).update(dt);
+            if (particles.get(i).shouldRemove()){
+                particles.remove(i);
+                i--;
+            }
+        }
+
+        //check collision
+        checkCollisions();
+    }
+
+    private void checkCollisions(){
+
+        //player-asteroid collision
+        if (!player.isHit()){
+            for (int i = 0; i < asteroids.size(); i++){
+                Asteroid a = asteroids.get(i);
+                if (a.intersects(player)){
+                    player.hit();
+                    asteroids.remove(i);
+                    i--;
+                    splitAsteroids(a);
+                    break;
+                }
+            }
+        }
+
+        //bullet-asteroid collision
+        for (int i = 0; i < bullets.size(); i++){
+            Bullet b = bullets.get(i);
+            for (int j = 0; j < asteroids.size(); j++){
+                Asteroid a = asteroids.get(j);
+                if (a.contains(b.getx(), b.gety())){
+                    bullets.remove(i);
+                    i--;
+                    asteroids.remove(j);
+                    j--;
+                    splitAsteroids(a);
+                    break;
+                }
+            }
+        }
     }
 
     @Override
@@ -109,6 +187,11 @@ public class PlayState extends GameState{
         //draw asteroids
         for (int i = 0; i < asteroids.size(); i++){
             asteroids.get(i).draw(sr);
+        }
+
+        //draw particles
+        for (int i = 0; i < particles.size(); i++){
+            particles.get(i).draw(sr);
         }
     }
 
