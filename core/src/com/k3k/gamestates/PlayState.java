@@ -1,5 +1,8 @@
 package com.k3k.gamestates;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.k3k.entities.Asteroid;
@@ -14,7 +17,11 @@ import java.util.ArrayList;
 
 public class PlayState extends GameState{
 
+    private SpriteBatch sb;
     private ShapeRenderer sr;
+
+    private BitmapFont font;
+
     private Player player;
     private ArrayList<Bullet> bullets;
     private ArrayList<Asteroid> asteroids;
@@ -31,7 +38,11 @@ public class PlayState extends GameState{
 
     @Override
     public void init() {
+        sb = new SpriteBatch();
+
         sr = new ShapeRenderer();
+
+        FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("Hyperspace Bold.ttf"));
 
         bullets = new ArrayList<Bullet>();
 
@@ -108,6 +119,7 @@ public class PlayState extends GameState{
         player.update(dt);
         if (player.isDead()){
             player.reset();
+            player.loseLife();
             return;
         }
         //update player bullets
