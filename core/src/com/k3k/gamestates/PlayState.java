@@ -1,6 +1,5 @@
 package com.k3k.gamestates;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -41,8 +40,9 @@ public class PlayState extends GameState{
         sb = new SpriteBatch();
 
         sr = new ShapeRenderer();
-
-        FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("Hyperspace Bold.ttf"));
+//        font = new BitmapFont(Gdx.files.internal("fonts/Hyperspace Bold.ttf"), false);
+//        FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Hyperspace Bold.ttf"));
+//        font = gen.generateFont(20);
 
         bullets = new ArrayList<Bullet>();
 
