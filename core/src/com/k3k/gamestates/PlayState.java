@@ -1,7 +1,9 @@
 package com.k3k.gamestates;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.k3k.entities.Asteroid;
@@ -40,9 +42,9 @@ public class PlayState extends GameState{
         sb = new SpriteBatch();
 
         sr = new ShapeRenderer();
-//        font = new BitmapFont(Gdx.files.internal("fonts/Hyperspace Bold.ttf"), false);
-//        FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Hyperspace Bold.ttf"));
-//        font = gen.generateFont(20);
+        font = new BitmapFont(Gdx.files.internal("Hyperspace Bold.ttf"), false);
+        FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Hyperspace Bold.ttf"));
+        font = gen.generateFont(20);
 
         bullets = new ArrayList<Bullet>();
 
@@ -205,6 +207,13 @@ public class PlayState extends GameState{
         for (int i = 0; i < particles.size(); i++){
             particles.get(i).draw(sr);
         }
+
+        //draw score
+        sb.setColor(1,1,1,1);
+        sb.begin();
+        font.draw(sb, Long.toString(player.getScore()), 40, 390);
+        sb.end();
+
     }
 
     @Override
